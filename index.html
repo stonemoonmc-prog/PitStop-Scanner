@@ -30,11 +30,18 @@
 
     p {
       opacity: 0.85;
+      font-size: 18px;
     }
 
     #reader {
-      margin-top: 25px;
       width: 100%;
+      margin-top: 25px;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 16px;
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -46,13 +53,21 @@
     <p>Scanne le billet</p>
 
     <div id="reader"></div>
+
+    <div class="status" id="status">
+      Ouverture de la caméra...
+    </div>
   </div>
 
   <script>
     const webhook =
       "https://hook.us2.make.com/pbyr9eb9vjpuc73syba8sxen9h8a8bjt";
 
+    const statusText = document.getElementById("status");
+
     let scanned = false;
+
+    const html5QrCode = new Html5Qrcode("reader");
 
     function onScanSuccess(decodedText) {
       if (scanned) return;
@@ -60,37 +75,78 @@
       const ticket = decodedText.trim();
 
       if (!ticket.startsWith("HAL26-")) {
-        alert("❌ QR NON VALIDE");
+        statusText.innerHTML = "❌ QR non valide";
+
+        setTimeout(() => {
+          statusText.innerHTML = "Scanne le billet";
+        }, 1500);
+
         return;
       }
 
       scanned = true;
+
+      statusText.innerHTML = "⏳ Vérification du billet...";
 
       window.location.href =
         webhook + "?ticket=" + encodeURIComponent(ticket);
     }
 
     function onScanFailure(error) {
-      // On ignore les lectures ratées
+      // On ignore les lectures ratées pendant que la caméra cherche un QR.
     }
 
-    const scanner = new Html5QrcodeScanner(
-      "reader",
-      {
-        fps: 10,
-        qrbox: {
-          width: 250,
-          height: 250
+    function startScanner() {
+      html5QrCode.start(
+        {
+          facingMode: {
+            exact: "environment"
+          }
         },
-        rememberLastUsedCamera: true,
-        supportedScanTypes: [
-          Html5QrcodeScanType.SCAN_TYPE_CAMERA
-        ]
-      },
-      false
-    );
+        {
+          fps: 10,
+          qrbox: {
+            width: 250,
+            height: 250
+          },
+          aspectRatio: 1.0
+        },
+        onScanSuccess,
+        onScanFailure
+      )
+      .then(() => {
+        statusText.innerHTML = "📷 Caméra arrière prête";
+      })
+      .catch(err => {
+        console.error("Erreur caméra :", err);
 
-    scanner.render(onScanSuccess, onScanFailure);
+        // Petit fallback au cas où Safari refuse "exact".
+        html5QrCode.start(
+          {
+            facingMode: "environment"
+          },
+          {
+            fps: 10,
+            qrbox: {
+              width: 250,
+              height: 250
+            }
+          },
+          onScanSuccess,
+          onScanFailure
+        )
+        .then(() => {
+          statusText.innerHTML = "📷 Caméra arrière prête";
+        })
+        .catch(error => {
+          console.error("Impossible d'ouvrir la caméra :", error);
+          statusText.innerHTML =
+            "❌ Impossible d'ouvrir la caméra. Vérifie les permissions Safari.";
+        });
+      });
+    }
+
+    startScanner();
   </script>
 
 </body>
