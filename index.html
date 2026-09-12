@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#050505">
 
   <title>Scanner PitStop</title>
 
@@ -13,66 +20,147 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: #050505;
+    }
+
+    body {
       min-height: 100vh;
+      min-height: 100dvh;
+
       background:
-        radial-gradient(circle at top, rgba(0, 89, 255, 0.10), transparent 32%),
-        radial-gradient(circle at bottom, rgba(255, 0, 45, 0.10), transparent 32%),
+        radial-gradient(
+          circle at 20% 10%,
+          rgba(0, 102, 255, 0.13),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 80% 15%,
+          rgba(255, 0, 45, 0.11),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 50% 100%,
+          rgba(255, 0, 45, 0.08),
+          transparent 38%
+        ),
         #050505;
+
       color: white;
-      font-family: Arial, Helvetica, sans-serif;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
       text-align: center;
+
       overflow-x: hidden;
     }
 
     .page {
       width: 100%;
       max-width: 520px;
+
       margin: 0 auto;
-      padding: 18px 18px 36px;
+
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        max(30px, env(safe-area-inset-bottom));
+    }
+
+    /* =========================
+       LOGO
+       ========================= */
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: 100%;
+
+      margin: 0 auto 8px;
     }
 
     .logo {
       display: block;
+
       width: 185px;
-      max-width: 62vw;
+      max-width: 65vw;
+
       height: auto;
-      margin: 0 auto 8px;
+
+      margin: 0 auto;
+
+      object-fit: contain;
+
       filter:
-        drop-shadow(0 0 12px rgba(255, 0, 30, 0.35))
-        drop-shadow(0 0 16px rgba(0, 100, 255, 0.30));
+        drop-shadow(
+          0 0 10px rgba(255, 0, 40, 0.35)
+        )
+        drop-shadow(
+          0 0 14px rgba(0, 100, 255, 0.30)
+        );
     }
 
+    /* =========================
+       TITRES
+       ========================= */
+
     h1 {
-      margin: 6px 0 4px;
-      font-size: 34px;
+      margin: 10px 0 5px;
+
+      font-size: 32px;
       font-weight: 800;
+
       letter-spacing: 7px;
+
       text-shadow:
-        0 0 10px rgba(0, 110, 255, 0.75),
-        0 0 18px rgba(255, 20, 50, 0.25);
+        0 0 9px rgba(0, 110, 255, 0.75),
+        0 0 18px rgba(255, 20, 50, 0.30);
     }
 
     .subtitle {
       margin: 0 0 22px;
-      color: #d8d8d8;
-      font-size: 17px;
+
+      color: rgba(255, 255, 255, 0.72);
+
+      font-size: 16px;
+
       letter-spacing: 2px;
     }
 
+    /* =========================
+       CADRE SCANNER
+       ========================= */
+
     .scanner-shell {
       position: relative;
+
+      width: 100%;
+
       padding: 3px;
+
       border-radius: 28px;
-      background: linear-gradient(
-        90deg,
-        #0a7cff 0%,
-        #0a7cff 25%,
-        #4320ff 48%,
-        #ff123f 75%,
-        #ff123f 100%
-      );
+
+      background:
+        linear-gradient(
+          90deg,
+          #008cff 0%,
+          #126cff 25%,
+          #4b27ff 48%,
+          #ff174d 75%,
+          #ff123f 100%
+        );
+
       box-shadow:
         -8px 0 28px rgba(0, 110, 255, 0.38),
         8px 0 28px rgba(255, 15, 55, 0.36);
@@ -80,154 +168,244 @@
 
     .scanner-card {
       position: relative;
-      min-height: 360px;
+
+      width: 100%;
+
+      min-height: 350px;
+
       border-radius: 25px;
+
       overflow: hidden;
+
       background: #090909;
     }
 
     #reader {
       width: 100%;
-      min-height: 360px;
+
+      min-height: 350px;
+
       background: #090909;
     }
 
     #reader video {
       width: 100% !important;
-      height: 360px !important;
+
+      height: 350px !important;
+
       object-fit: cover !important;
+
       border-radius: 25px;
     }
 
     #reader__scan_region {
-      min-height: 360px !important;
+      min-height: 350px !important;
     }
 
     #reader__dashboard {
       display: none !important;
     }
 
+    /* =========================
+       OVERLAY QR
+       ========================= */
+
     .overlay {
       position: absolute;
+
       inset: 0;
-      z-index: 5;
+
+      z-index: 10;
+
       pointer-events: none;
+
       display: flex;
-      align-items: center;
+
       justify-content: center;
+      align-items: center;
     }
 
     .qr-guide {
       position: relative;
-      width: 240px;
-      height: 240px;
+
+      width: 225px;
+      height: 225px;
     }
 
     .corner {
       position: absolute;
-      width: 58px;
-      height: 58px;
+
+      width: 55px;
+      height: 55px;
     }
 
-    .tl {
+    .corner-tl {
       top: 0;
       left: 0;
-      border-top: 4px solid #17a0ff;
-      border-left: 4px solid #17a0ff;
-      border-radius: 16px 0 0 0;
-      box-shadow: -5px -5px 16px rgba(0, 140, 255, 0.7);
+
+      border-top: 4px solid #19a4ff;
+      border-left: 4px solid #19a4ff;
+
+      border-radius: 15px 0 0 0;
+
+      filter:
+        drop-shadow(
+          0 0 7px #008cff
+        );
     }
 
-    .tr {
+    .corner-tr {
       top: 0;
       right: 0;
-      border-top: 4px solid #ff243f;
-      border-right: 4px solid #ff243f;
-      border-radius: 0 16px 0 0;
-      box-shadow: 5px -5px 16px rgba(255, 20, 55, 0.7);
+
+      border-top: 4px solid #ff244c;
+      border-right: 4px solid #ff244c;
+
+      border-radius: 0 15px 0 0;
+
+      filter:
+        drop-shadow(
+          0 0 7px #ff174d
+        );
     }
 
-    .bl {
+    .corner-bl {
       bottom: 0;
       left: 0;
-      border-bottom: 4px solid #17a0ff;
-      border-left: 4px solid #17a0ff;
-      border-radius: 0 0 0 16px;
-      box-shadow: -5px 5px 16px rgba(0, 140, 255, 0.7);
+
+      border-bottom: 4px solid #19a4ff;
+      border-left: 4px solid #19a4ff;
+
+      border-radius: 0 0 0 15px;
+
+      filter:
+        drop-shadow(
+          0 0 7px #008cff
+        );
     }
 
-    .br {
+    .corner-br {
       bottom: 0;
       right: 0;
-      border-bottom: 4px solid #ff243f;
-      border-right: 4px solid #ff243f;
-      border-radius: 0 0 16px 0;
-      box-shadow: 5px 5px 16px rgba(255, 20, 55, 0.7);
+
+      border-bottom: 4px solid #ff244c;
+      border-right: 4px solid #ff244c;
+
+      border-radius: 0 0 15px 0;
+
+      filter:
+        drop-shadow(
+          0 0 7px #ff174d
+        );
     }
 
     .guide-center {
       position: absolute;
-      left: 50%;
+
       top: 50%;
-      width: 100%;
+      left: 50%;
+
       transform: translate(-50%, -50%);
+
+      width: 100%;
     }
 
     .qr-symbol {
-      font-size: 40px;
-      opacity: 0.62;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
+
+      font-size: 42px;
+
+      color: rgba(255, 255, 255, 0.48);
     }
 
     .guide-text {
-      font-size: 13px;
-      letter-spacing: 4px;
-      color: rgba(255,255,255,0.60);
-      line-height: 1.6;
-    }
+      color: rgba(255, 255, 255, 0.60);
 
-    .status-wrap {
-      margin: 28px auto 0;
-      width: fit-content;
-      max-width: 92%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 13px 22px;
-      border: 1px solid #2e333d;
-      border-radius: 999px;
-      background: rgba(18, 20, 24, 0.92);
-      box-shadow: 0 6px 22px rgba(0,0,0,0.45);
-      font-size: 15px;
-    }
+      font-size: 12px;
 
-    .camera-icon {
-      font-size: 20px;
-    }
+      font-weight: 600;
 
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #00d85b;
-      box-shadow: 0 0 12px rgba(0, 216, 91, 0.85);
-      flex: 0 0 auto;
-    }
-
-    #status {
-      text-align: left;
-    }
-
-    .footer {
-      margin-top: 42px;
-      color: rgba(255,255,255,0.40);
-      font-size: 10px;
       letter-spacing: 3px;
+
       line-height: 1.7;
     }
 
+    /* =========================
+       STATUS
+       ========================= */
+
+    .status-wrap {
+      width: fit-content;
+
+      max-width: 95%;
+
+      margin: 27px auto 0;
+
+      padding: 13px 20px;
+
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+
+      gap: 10px;
+
+      background: rgba(18, 20, 24, 0.95);
+
+      border: 1px solid #30343c;
+
+      border-radius: 999px;
+
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.45);
+    }
+
+    .camera-icon {
+      font-size: 19px;
+    }
+
+    #status {
+      font-size: 14px;
+
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 11px;
+      height: 11px;
+
+      flex: 0 0 auto;
+
+      border-radius: 50%;
+
+      background: #00d85b;
+
+      box-shadow:
+        0 0 12px rgba(0, 216, 91, 0.9);
+    }
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    .footer {
+      margin-top: 38px;
+
+      color: rgba(255, 255, 255, 0.34);
+
+      font-size: 9px;
+
+      letter-spacing: 2.5px;
+
+      line-height: 1.8;
+    }
+
+    /* =========================
+       IPHONE PETIT ÉCRAN
+       ========================= */
+
     @media (max-width: 420px) {
+
       .page {
         padding-left: 12px;
         padding-right: 12px;
@@ -238,21 +416,34 @@
       }
 
       h1 {
-        font-size: 29px;
+        font-size: 28px;
+
         letter-spacing: 6px;
+      }
+
+      .subtitle {
+        font-size: 15px;
       }
 
       .scanner-card,
       #reader,
       #reader video,
       #reader__scan_region {
-        min-height: 330px !important;
-        height: 330px !important;
+        min-height: 325px !important;
+        height: 325px !important;
       }
 
       .qr-guide {
-        width: 215px;
-        height: 215px;
+        width: 205px;
+        height: 205px;
+      }
+
+      .guide-text {
+        font-size: 11px;
+      }
+
+      #status {
+        font-size: 13px;
       }
     }
   </style>
@@ -262,47 +453,96 @@
 
   <main class="page">
 
-    <img
-      src="ab3afe77-8eaa-4ff5-ac7a-ab0108bc952f.png"
-      alt="Le PitStop Bar"
-      class="logo"
-    >
+    <!-- LOGO PITSTOP -->
+
+    <div class="logo-container">
+
+      <img
+        src="./ab3afe77-8eaa-4ff5-ac7a-ab0108bc952f.png"
+        alt="Le PitStop Bar"
+        class="logo"
+      >
+
+    </div>
+
+
+    <!-- TITRE -->
 
     <h1>SCANNER</h1>
-    <p class="subtitle">Scanne le billet</p>
+
+    <p class="subtitle">
+      Scanne le billet
+    </p>
+
+
+    <!-- SCANNER -->
 
     <div class="scanner-shell">
+
       <div class="scanner-card">
 
         <div id="reader"></div>
 
+
+        <!-- GUIDE QR -->
+
         <div class="overlay">
+
           <div class="qr-guide">
 
-            <div class="corner tl"></div>
-            <div class="corner tr"></div>
-            <div class="corner bl"></div>
-            <div class="corner br"></div>
+            <div class="corner corner-tl"></div>
+
+            <div class="corner corner-tr"></div>
+
+            <div class="corner corner-bl"></div>
+
+            <div class="corner corner-br"></div>
+
 
             <div class="guide-center">
-              <div class="qr-symbol">▦</div>
+
+              <div class="qr-symbol">
+                ▦
+              </div>
+
               <div class="guide-text">
-                PLACE LE QR CODE<br>
+                PLACE LE QR CODE
+                <br>
                 ICI
               </div>
+
             </div>
 
           </div>
+
         </div>
 
       </div>
+
     </div>
 
+
+    <!-- STATUS CAMÉRA -->
+
     <div class="status-wrap">
-      <span class="camera-icon">📷</span>
-      <span id="status">Ouverture de la caméra...</span>
-      <span class="status-dot" id="statusDot"></span>
+
+      <span class="camera-icon">
+        📷
+      </span>
+
+      <span id="status">
+        Ouverture de la caméra...
+      </span>
+
+      <span
+        class="status-dot"
+        id="statusDot"
+      ></span>
+
     </div>
+
+
+    <!-- FOOTER -->
 
     <div class="footer">
       GOOD DRINKS • GOOD PEOPLE • SAME PITSTOP
@@ -310,101 +550,240 @@
 
   </main>
 
+
   <script>
+
+    /* =========================
+       WEBHOOK MAKE
+       ========================= */
+
     const webhook =
       "https://hook.us2.make.com/pbyr9eb9vjpuc73syba8sxen9h8a8bjt";
 
-    const statusText = document.getElementById("status");
-    const statusDot = document.getElementById("statusDot");
+
+    /* =========================
+       ÉLÉMENTS
+       ========================= */
+
+    const statusText =
+      document.getElementById("status");
+
+    const statusDot =
+      document.getElementById("statusDot");
+
 
     let scanned = false;
 
-    const html5QrCode = new Html5Qrcode("reader");
 
-    function setStatus(text, color = "#00d85b") {
+    const html5QrCode =
+      new Html5Qrcode("reader");
+
+
+    /* =========================
+       STATUS
+       ========================= */
+
+    function setStatus(
+      text,
+      color = "#00d85b"
+    ) {
+
       statusText.textContent = text;
+
       statusDot.style.background = color;
-      statusDot.style.boxShadow = `0 0 12px ${color}`;
+
+      statusDot.style.boxShadow =
+        "0 0 12px " + color;
     }
 
-    function onScanSuccess(decodedText) {
-      if (scanned) return;
 
-      const ticket = decodedText.trim();
+    /* =========================
+       QR DÉTECTÉ
+       ========================= */
+
+    function onScanSuccess(decodedText) {
+
+      if (scanned) {
+        return;
+      }
+
+
+      const ticket =
+        decodedText.trim();
+
+
+      /* Vérifie le format HAL26-XX */
 
       if (!ticket.startsWith("HAL26-")) {
-        setStatus("QR non valide", "#ff243f");
+
+        setStatus(
+          "QR non valide",
+          "#ff244c"
+        );
+
 
         setTimeout(() => {
-          setStatus("Caméra arrière prête");
+
+          setStatus(
+            "Caméra arrière prête"
+          );
+
         }, 1500);
+
 
         return;
       }
 
+
       scanned = true;
 
-      setStatus("Vérification du billet...", "#ffaa00");
+
+      setStatus(
+        "Vérification du billet...",
+        "#ffaa00"
+      );
+
+
+      /* Envoie le BILLET_ID à Make */
 
       window.location.href =
-        webhook + "?ticket=" + encodeURIComponent(ticket);
+        webhook
+        + "?ticket="
+        + encodeURIComponent(ticket);
     }
+
+
+    /* =========================
+       ÉCHEC DE LECTURE
+       ========================= */
 
     function onScanFailure(error) {
-      // Les lectures ratées sont normales pendant que la caméra cherche un QR.
+
+      /*
+        Normal pendant que la caméra
+        cherche un QR.
+      */
+
     }
 
+
+    /* =========================
+       DÉMARRAGE CAMÉRA
+       ========================= */
+
     function startScanner() {
+
+      /*
+        On essaie d'abord de forcer
+        exactement la caméra arrière.
+      */
+
       html5QrCode.start(
+
         {
           facingMode: {
             exact: "environment"
           }
         },
+
         {
           fps: 10,
+
           qrbox: {
-            width: 240,
-            height: 240
+            width: 225,
+            height: 225
           },
+
           aspectRatio: 1.0
         },
+
         onScanSuccess,
+
         onScanFailure
+
       )
+
       .then(() => {
-        setStatus("Caméra arrière prête");
+
+        setStatus(
+          "Caméra arrière prête"
+        );
+
       })
-      .catch(err => {
-        console.error("Caméra arrière exacte non disponible :", err);
+
+      .catch(error => {
+
+        console.log(
+          "Fallback caméra arrière",
+          error
+        );
+
+
+        /*
+          Si Safari refuse "exact",
+          on demande simplement
+          une caméra orientée arrière.
+        */
 
         html5QrCode.start(
+
           {
             facingMode: "environment"
           },
+
           {
             fps: 10,
+
             qrbox: {
-              width: 240,
-              height: 240
+              width: 225,
+              height: 225
             },
+
             aspectRatio: 1.0
           },
+
           onScanSuccess,
+
           onScanFailure
+
         )
+
         .then(() => {
-          setStatus("Caméra arrière prête");
+
+          setStatus(
+            "Caméra arrière prête"
+          );
+
         })
+
         .catch(error => {
-          console.error("Impossible d'ouvrir la caméra :", error);
-          setStatus("Impossible d'ouvrir la caméra", "#ff243f");
+
+          console.error(
+            "Erreur caméra",
+            error
+          );
+
+
+          setStatus(
+            "Impossible d'ouvrir la caméra",
+            "#ff244c"
+          );
+
         });
+
       });
+
     }
 
+
+    /* =========================
+       LANCEMENT
+       ========================= */
+
     startScanner();
+
   </script>
 
 </body>
+
 </html>
